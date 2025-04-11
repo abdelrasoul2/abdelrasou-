@@ -1,0 +1,153 @@
+"use client"
+
+import type React from "react"
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
+import { useLanguage } from "@/contexts/language-context"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { AdUnit } from "@/components/ad-unit"
+
+export default function LoginPage() {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState<string | null>(null)
+  const { user, signIn, isLoading } = useAuth()
+  const { t, dir } = useLanguage()
+  const router = useRouter()
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (user) {
+      router.push("/")
+    }
+  }, [user, router])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError(null)
+
+    if (!email || !password) {
+      setError("Please fill in all fields")
+      return
+    }
+
+    try {
+      const { error: signInError } = await signIn(email, password)
+
+      if (signInError) {
+        // Handle specific error cases
+        if (signInError.message.includes("Email not confirmed")) {
+          setError("Your email is not confirmed. For this demo, please create a new account.")
+        } else {
+          setError(signInError.message)
+        }
+      }
+    } catch (err) {
+      console.error("Login error:", err)
+      setError("An unexpected error occurred. Please try again.")
+    }
+  }
+
+  // Show loading state while checking auth
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-orange-500"></div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col" dir={dir}>
+      <div className="flex flex-1 items-center justify-center bg-muted/5 px-4 py-12 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          {/* Ad Unit above login form with explicit dimensions */}
+          <div className="mb-6">
+            <AdUnit
+              slot="1234567890"
+              width="100%"
+              height="90px"
+              format="horizontal"
+              className="mx-auto bg-muted/20 rounded-lg"
+            />
+          </div>
+
+          <Card className="border-orange-500/20">
+            <CardHeader className="space-y-1">
+              <CardTitle className="text-2xl font-bold tracking-tight">{t("signInTitle")}</CardTitle>
+              <CardDescription>{t("signInDesc")}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {error && (
+                <Alert variant="destructive" className="mb-4">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium">
+                    {t("emailAddress")}
+                  </label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium">
+                    {t("password")}
+                  </label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+
+                <Button type="submit" className="w-full bg-orange-500 hover:bg-orange-600" disabled={isLoading}>
+                  {isLoading ? "..." : t("signIn")}
+                </Button>
+              </form>
+            </CardContent>
+            <CardFooter className="flex flex-col space-y-2">
+              <div className="text-sm text-center">
+                {t("dontHaveAccount")}{" "}
+                <Link href="/signup" className="font-medium text-orange-500 hover:text-orange-600">
+                  {t("signUp")}
+                </Link>
+              </div>
+            </CardFooter>
+          </Card>
+
+          {/* Ad Unit below login form with explicit dimensions */}
+          <div className="mt-6">
+            <AdUnit
+              slot="2345678901"
+              width="100%"
+              height="250px"
+              format="rectangle"
+              className="mx-auto bg-muted/20 rounded-lg"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
