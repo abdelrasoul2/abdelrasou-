@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Script from "next/script"
+import Head from "next/head"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
@@ -28,11 +29,16 @@ export default function HomePage() {
 
   return (
     <>
+      <Head>
+        <meta name="google-adsense-account" content="ca-pub-5007628650449617" />
+      </Head>
+
       <Script
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5007628650449617"
         crossOrigin="anonymous"
       />
+
       <div className="flex flex-col min-h-screen" dir={dir}>
         <header className="border-b">
           <div className="container flex h-16 items-center justify-between py-4">
