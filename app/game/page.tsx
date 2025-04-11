@@ -11,7 +11,7 @@ import { BubbleShooterGame } from "@/components/bubble-shooter-game"
 import { WritingGame } from "@/components/writing-game"
 import { FallingWordsGame } from "@/components/falling-words-game"
 import { Footer } from "@/components/footer"
-import { AdUnit } from "@/components/ad-unit"
+import { AdUnit } from "@/components/ad-unit" // ✅ إعلان AdSense
 
 export default function GamePage() {
   const { user } = useAuth()
@@ -45,7 +45,7 @@ export default function GamePage() {
           <p className="text-muted-foreground">{t("typingMasterDesc")}</p>
         </div>
 
-        {/* Ad Unit before game tabs with fixed dimensions */}
+        {/* ✅ إعلان قبل اللعبة */}
         <div className="mb-8 flex justify-center">
           <div className="w-[728px] h-[90px] max-w-full">
             <AdUnit
@@ -101,7 +101,7 @@ export default function GamePage() {
           </TabsContent>
         </Tabs>
 
-        {/* Ad Unit after game with fixed dimensions */}
+        {/* ✅ إعلان بعد اللعبة */}
         <div className="mt-8 flex justify-center">
           <div className="w-[300px] h-[250px]">
             <AdUnit
