@@ -14,7 +14,7 @@ const notoKufiArabic = Noto_Kufi_Arabic({ subsets: ["arabic"], variable: "--font
 export const metadata: Metadata = {
   title: "TypingMaster",
   description: "Improve your typing skills with our interactive typing games",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -25,6 +25,10 @@ export default function RootLayout({
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
+        {/* ✅ وسم إثبات ملكية AdSense */}
+        <meta name="google-adsense-account" content="ca-pub-5007628650449617" />
+
+        {/* ✅ كود جلب AdSense */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5007628650449617"
@@ -44,6 +48,3 @@ export default function RootLayout({
     </html>
   )
 }
-
-
-import './globals.css'
